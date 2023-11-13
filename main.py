@@ -2,14 +2,16 @@ print("Este diccionario dispone de varias palabras de las nuevas generaciones qu
 print("   ")
 print("   ")
 meme_dict= {
-            "CRINGE": "Algo excepcionalmente raro o embarazoso",
-            "LOL": "Una respuesta común a algo gracioso",
+            "CRINGE": "| Algo excepcionalmente raro o embarazoso |",
+            "LOL": "| Una respuesta común a algo gracioso |",
+            "CREEPY": "| Algo aterrador, hasta el punto de ser siniestro |",
             }
 
 word= input("Escriba su selección: ")
 
 if word in meme_dict.keys():
     print("   ")
+    print("RESPUESTA:")
     print(meme_dict[word])
 
 else:
