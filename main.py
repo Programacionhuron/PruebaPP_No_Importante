@@ -1,20 +1,39 @@
-print("Este diccionario dispone de varias palabras de las nuevas generaciones que les pueden servir a ustedes personas mayores a enterder mejor a sus hijos, y darles la mejor y mas feliz infancia.")
-print("   ")
-print("   ")
-meme_dict= {
-            "CRINGE": "| Algo excepcionalmente raro o embarazoso |",
-            "LOL": "| Una respuesta común a algo gracioso |",
-            "CREEPY": "| Algo aterrador, hasta el punto de ser siniestro |",
-            }
+import discord
+import random
+import asyncio
 
-word= input("Escriba su selección: ")
 
-if word in meme_dict.keys():
-    print("   ")
-    print("RESPUESTA:")
-    print(meme_dict[word])
+class MyClient(discord.Client):
+    async def on_ready(self):
+        print(f'Logged in as {self.user} (ID: {self.user.id})')
+        print('------')
 
-else:
-    print("   ")
-    print("Esa palabra no ha sido encontrada, revise si esta bien escrita e intentelo de nuevo.")
-    print("Recuerde que la palabra tiene que estar escrita completamente en mayúsculas: Ejemplo: LOL")
+    async def on_message(self, message):
+        # we do not want the bot to reply to itself
+        if message.author.id == self.user.id:
+            return
+
+        if message.content.startswith('$guess'):
+            await message.channel.send('Guess a number between 1 and 10.')
+
+            def is_correct(m):
+                return m.author == message.author and m.content.isdigit()
+
+            answer = random.randint(1, 10)
+
+            try:
+                guess = await self.wait_for('message', check=is_correct, timeout=5.0)
+            except asyncio.TimeoutError:
+                return await message.channel.send(f'Sorry, you took too long it was {answer}.')
+
+            if int(guess.content) == answer:
+                await message.channel.send('You are right!')
+            else:
+                await message.channel.send(f'Oops. It is actually {answer}.')
+
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+client = MyClient(intents=intents)
+client.run('MTA1MDA3OTg5NTk1MjMxNDQwMQ.GCMKmB.O1W2i25IW7qDdepm8vIBq1b2MQjdPeQjHzMtvY')
